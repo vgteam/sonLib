@@ -14,5 +14,5 @@ ${libPath}/cuTest.a : CuTest.c CuTest.h
 	ar rc cuTest.a *.o
 	ranlib cuTest.a
 	rm -f *.o
-	mv cuTest.a ${libPath}/
-	cp CuTest.h ${libPath}/
+	cat cuTest.a >${libPath}/cuTest.a
+	cat CuTest.h >${libPath}/CuTest.h

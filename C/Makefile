@@ -23,32 +23,32 @@ clean :
 ${binPath}/sonLibTests : ${libTests} ${libInternalHeaders} ${libPath}/sonLib.a ${libPath}/cuTest.a tests/allTests.c
 	@mkdir -p $(dir $@)
 	${cxx} ${cflags} -I inc -I ${libPath} -o $@.tmp tests/allTests.c ${libTests} ${libPath}/sonLib.a ${libPath}/cuTest.a ${dblibs} ${mysqlLibs} -lm -lstdc++ -lpthread
-	mv $@.tmp $@
+	cat $@.tmp >$@
 
 ${binPath}/sonLib_kvDatabaseTest : ${libTests} ${libInternalHeaders} ${libPath}/sonLib.a ${libPath}/cuTest.a tests/kvDatabaseTest.c tests/kvDatabaseTestCommon.c
 	@mkdir -p $(dir $@)
 	${cxx} ${cflags} -I inc -I ${libPath} -I tests -o $@.tmp tests/kvDatabaseTest.c tests/kvDatabaseTestCommon.c ${libPath}/sonLib.a ${libPath}/cuTest.a ${dblibs} ${mysqlLibs} -lm
-	mv $@.tmp $@
+	cat $@.tmp >$@
 
 ${binPath}/sonLib_cigarTest : tests/cigarsTest.c ${libTests} ${libInternalHeaders} ${libPath}/sonLib.a 
 	@mkdir -p $(dir $@)
 	${cxx} ${cflags} -I inc -I ${libPath} -o $@.tmp tests/cigarsTest.c ${libPath}/sonLib.a -lm
-	mv $@.tmp $@
+	cat $@.tmp >$@
 
 ${binPath}/sonLib_fastaCTest : tests/fastaCTest.c ${libTests} ${libInternalHeaders} ${libPath}/sonLib.a
 	@mkdir -p $(dir $@)
 	${cxx} ${cflags} -I inc -I ${libPath} -o $@.tmp tests/fastaCTest.c ${libPath}/sonLib.a -lm
-	mv $@.tmp $@
+	cat $@.tmp >$@
 
 ${binPath}/kt_connect_test : tests/kt_connect_test.cpp ${libTests} ${libInternalHeaders} ${libPath}/sonLib.a
 	@mkdir -p $(dir $@)
 	${cpp} ${cppflags} -I inc -I ${libPath}/ -o $@.tmp tests/kt_connect_test.cpp ${libPath}/sonLib.a ${dblibs} -lm
-	mv $@.tmp $@
+	cat $@.tmp >$@
 
 ${libPath}/%.h: inc/%.h
 	@mkdir -p $(dir $@)
 	cp $< $@.tmp
-	mv $@.tmp $@
+	cat $@.tmp >$@
 
 ${libPath}/sonLib.a : ${libSources} ${cppSources} $(foreach l, ${libHeaders}, ${libPath}/$(notdir $l)) ${libInternalHeaders}
 	@mkdir -p $(dir $@)
@@ -57,7 +57,7 @@ ${libPath}/sonLib.a : ${libSources} ${cppSources} $(foreach l, ${libHeaders}, ${
 	ar rc sonLib.a *.o ${quickTreeObjects}
 	ranlib sonLib.a 
 	rm *.o
-	mv sonLib.a ${libPath}/
+	cat sonLib.a >${libPath}/sonLib.a
 
 test:
 	python allTests.py --testLength=SHORT --logLevel CRITICAL
